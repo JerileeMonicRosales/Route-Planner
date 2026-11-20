@@ -489,3 +489,53 @@ footer {
     border-left: 0;
   }
 }
+/* account, stops, favorites */
+.acct { margin-left: auto; display: flex; align-items: center; gap: 12px; font-size: 0.85rem; }
+.mut { color: var(--mut); }
+.small-note { margin: 6px 8px; font-size: 0.82rem; }
+.btn-sm, .chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px;
+  border: 1px solid var(--line); border-radius: 10px; background: #fff;
+  color: var(--ink); font-size: 0.82rem; cursor: pointer;
+}
+.btn-sm:hover, .chip:hover { border-color: var(--ink); }
+.chip.on { border-color: var(--brand); color: var(--brand); box-shadow: inset 0 0 0 1px var(--brand); }
+.tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pin.stop { background: var(--mut); }
+.stop-row { position: relative; }
+.rm {
+  position: absolute; top: -2px; right: 0; display: flex; padding: 4px;
+  border: 0; background: none; color: var(--mut); cursor: pointer; border-radius: 6px;
+}
+.rm:hover { color: var(--ink); background: var(--soft); }
+.add-stop {
+  display: flex; align-items: center; gap: 6px; margin: 0 0 14px; padding: 6px 4px;
+  border: 0; background: none; color: var(--brand); font-size: 0.85rem; font-weight: 500; cursor: pointer;
+}
+.fav { display: flex; align-items: center; }
+.fav > button:first-child { flex: 1; min-width: 0; }
+.history .del { width: auto; margin: 2px 0 0; padding: 6px; color: var(--mut); }
+
+/* login modal */
+.modal-back {
+  position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center;
+  background: rgba(29, 27, 26, 0.55); padding: 20px;
+}
+.modal {
+  position: relative; width: 100%; max-width: 400px; padding: 28px;
+  background: #fff; border-radius: 22px; box-shadow: var(--shadow);
+}
+.modal .rm { top: 14px; right: 14px; }
+.link-btn {
+  display: block; width: 100%; margin-top: 12px; border: 0; background: none;
+  color: var(--brand); font-size: 0.85rem; cursor: pointer;
+}
+
+/* weather overlay on the map */
+.wx { background: none; border: 0; }
+.wx-chip {
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  width: 70px; height: 28px; border-radius: 14px; background: #fff; color: var(--ink);
+  font-size: 0.78rem; box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.5);
+}
+.wx-chip svg { color: var(--brand); }

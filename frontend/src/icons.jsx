@@ -12,6 +12,16 @@ const P = {
   uturn: <><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5 5.5 5.5 0 0 1-5.5 5.5H11"/></>,
   loop: <><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></>,
   dot: <circle cx="12" cy="12" r="3"/>,
+    plus: <path d="M12 5v14M5 12h14"/>,
+  x: <path d="M18 6 6 18M6 6l12 12"/>,
+  user: <><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></>,
+  star: <path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21l1.2-6.9-5-4.9 6.9-1z"/>,
+  sun: <><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></>,
+  cloud: <path d="M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 1 1 0 9Z"/>,
+  fog: <><path d="M17.5 15H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 0 1 0 9"/><path d="M5 19h14M8 22h8"/></>,
+  rain: <><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2"/><path d="M16 14v6M8 14v6M12 16v6"/></>,
+  snow: <><path d="M20 17.6A5 5 0 0 0 18 8h-1.3A7 7 0 1 0 4 14.9"/><path d="M8 15h.01M8 19h.01M12 17h.01M12 21h.01M16 15h.01M16 19h.01"/></>,
+  storm: <><path d="M19 16.9A5 5 0 0 0 18 7h-1.3A8 8 0 1 0 4 15.3"/><path d="m13 11-4 6h6l-4 6"/></>,
 };
 export default function Icon({ name, size = 18, rotate = 0 }) {
   return (
