@@ -1,4 +1,4 @@
-"""weather.py - current weather at points along a route (Open-Meteo, no API key)."""
+"""weather.py - current weather at points (Open-Meteo, no API key)."""
 import requests
 
 URL = "https://api.open-meteo.com/v1/forecast"
@@ -32,7 +32,10 @@ def along_route(points):
     params = {
         "latitude": ",".join(str(p["lat"]) for p in points),
         "longitude": ",".join(str(p["lng"]) for p in points),
-        "current": "temperature_2m,weather_code,wind_speed_10m,precipitation",
+        "current": "temperature_2m,apparent_temperature,relative_humidity_2m,"
+                   "weather_code,wind_speed_10m,precipitation",
+        "daily": "temperature_2m_max,temperature_2m_min",
+        "forecast_days": 1,
         "timezone": "auto",
     }
     try:
@@ -44,9 +47,14 @@ def along_route(points):
     data = data if isinstance(data, list) else [data]   # 1 point -> dict, many -> list
     out = []
     for p, d in zip(points, data):
-        c = d.get("current") or {}
+        c, day = d.get("current") or {}, d.get("daily") or {}
         label, kind = describe(c.get("weather_code", 3))
-        out.append({"lat": p["lat"], "lng": p["lng"], "label": label, "kind": kind,
-                    "temp_c": c.get("temperature_2m"), "wind_kmh": c.get("wind_speed_10m"),
-                    "rain_mm": c.get("precipitation")})
+        out.append({
+            "lat": p["lat"], "lng": p["lng"], "label": label, "kind": kind,
+            "temp_c": c.get("temperature_2m"), "feels_c": c.get("apparent_temperature"),
+            "humidity": c.get("relative_humidity_2m"), "wind_kmh": c.get("wind_speed_10m"),
+            "rain_mm": c.get("precipitation"),
+            "high_c": (day.get("temperature_2m_max") or [None])[0],
+            "low_c": (day.get("temperature_2m_min") or [None])[0],
+        })
     return out

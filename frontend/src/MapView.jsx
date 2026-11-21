@@ -3,12 +3,17 @@ import L from "leaflet";
 import { renderToStaticMarkup } from "react-dom/server";
 import Icon from "./icons.jsx";
 
-// Draws the route, start/stop/end markers, and a weather overlay along the route.
-export default function MapView({ route, weather = [], units }) {
+// Draws the route, markers, weather overlay, and a highlighted/zoomed step.
+// full  = map is in full-screen mode (re-measure + re-fit)
+// focus = { coords: [[lat,lng],...], key } for the clicked direction step, or null
+export default function MapView({ route, weather = [], units, full = false, focus = null }) {
   const el = useRef(null);
   const map = useRef(null);
   const layer = useRef(null);
   const wx = useRef(null);
+  const hl = useRef(null);
+  const bounds = useRef(null);
+  const hadFocus = useRef(false);
 
   useEffect(() => {
     map.current = L.map(el.current).setView([20, 0], 2);
@@ -17,6 +22,7 @@ export default function MapView({ route, weather = [], units }) {
     }).addTo(map.current);
     layer.current = L.layerGroup().addTo(map.current);
     wx.current = L.layerGroup().addTo(map.current);
+    hl.current = L.layerGroup().addTo(map.current);
     return () => map.current.remove();
   }, []);
 
@@ -31,8 +37,39 @@ export default function MapView({ route, weather = [], units }) {
     dot([route.origin.lat, route.origin.lng], "#1D1B1A", route.origin.label);
     (route.waypoints || []).forEach((w, i) => dot([w.lat, w.lng], "#6E6560", `Stop ${i + 1}: ${w.label}`));
     dot([route.destination.lat, route.destination.lng], "#EE5212", route.destination.label);
-    map.current.fitBounds(line.getBounds(), { padding: [30, 30] });
+    bounds.current = line.getBounds();
+    map.current.fitBounds(bounds.current, { padding: [30, 30] });
   }, [route]);
+
+  // zoom to / highlight the clicked direction step (null = back to the whole route)
+  useEffect(() => {
+    hl.current.clearLayers();
+    if (!focus) {
+      if (hadFocus.current && bounds.current) {
+        map.current.flyToBounds(bounds.current, { padding: [30, 30], duration: 0.8 });
+      }
+      hadFocus.current = false;
+      return;
+    }
+    hadFocus.current = true;
+    const pts = focus.coords;
+    if (pts.length > 1) {
+      L.polyline(pts, { color: "#fff", weight: 13, opacity: 0.95 }).addTo(hl.current);
+      L.polyline(pts, { color: "#1D1B1A", weight: 7 }).addTo(hl.current);
+    }
+    L.circleMarker(pts[0], { radius: 9, color: "#fff", weight: 3, fillColor: "#1D1B1A", fillOpacity: 1 }).addTo(hl.current);
+    if (pts.length === 1) map.current.flyTo(pts[0], 18, { duration: 0.8 });
+    else map.current.flyToBounds(L.latLngBounds(pts), { padding: [70, 70], maxZoom: 18, duration: 0.8 });
+  }, [focus]);
+
+  // entering / leaving full screen: the container size changed, so tell Leaflet and re-fit
+  useEffect(() => {
+    const t = setTimeout(() => {
+      map.current.invalidateSize();
+      if (bounds.current) map.current.fitBounds(bounds.current, { padding: [30, 30] });
+    }, 80);
+    return () => clearTimeout(t);
+  }, [full]);
 
   useEffect(() => {
     wx.current.clearLayers();
