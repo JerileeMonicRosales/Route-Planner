@@ -12,33 +12,30 @@ import weather
 
 
 def load_env_file():
-    """Read KEY=value lines from backend/.env (or the folder above it)
-    into os.environ without requiring python-dotenv.
-    """
+    """Load local env files without overriding the process environment."""
     here = os.path.dirname(os.path.abspath(__file__))
 
     for folder in (here, os.path.dirname(here)):
-        try:
-            with open(
-                os.path.join(folder, ".env"),
-                encoding="utf-8-sig"
-            ) as f:
-                lines = f.read().splitlines()
-        except OSError:
-            continue
-
-        for line in lines:
-            line = line.strip()
-
-            if not line or line.startswith("#") or "=" not in line:
+        for filename in (".env", ".env.local"):
+            try:
+                with open(
+                    os.path.join(folder, filename),
+                    encoding="utf-8-sig"
+                ) as f:
+                    lines = f.read().splitlines()
+            except OSError:
                 continue
 
-            k, v = line.split("=", 1)
+            for line in lines:
+                line = line.strip()
 
-            if not os.environ.get(k.strip()):
-                os.environ[k.strip()] = v.strip().strip('"').strip("'")
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
 
-        return
+                k, v = line.split("=", 1)
+
+                if not os.environ.get(k.strip()):
+                    os.environ[k.strip()] = v.strip().strip('"').strip("'")
 
 
 load_env_file()

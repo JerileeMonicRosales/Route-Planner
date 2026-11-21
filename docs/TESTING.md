@@ -24,6 +24,17 @@ This document outlines the test scenarios for the enhanced GraphHopper Route Pla
 5. Compare the actual results with the expected results.
 6. Record any issues encountered.
 
+## Neon PostgreSQL smoke test
+
+After linking the Neon project and running `neon deploy`, Neon writes its
+connection variables to the repository's `.env` or `.env.local`. The backend
+loads those values together with `backend/.env`; do not commit either file.
+On startup, the backend creates the account and favorite-route tables if needed.
+
+Verify database-backed behavior through the app: register a new account, save a
+favorite route, then log in again and confirm that the favorite is still listed.
+The backend uses Neon’s pooled `DATABASE_URL` for normal application requests.
+
 ## Test Execution Results
 
 Pending execution.
