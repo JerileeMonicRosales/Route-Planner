@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Route Planner (Graphhopper) – Project Activity 3, Option 1
 
 Enhanced version of Lab 4.9.2. A **Python (Flask)** backend wraps the lab's Graphhopper
@@ -90,3 +91,7 @@ instead of the older `vehicle=`. `route()` now takes a list of points instead of
 (`feature/weather`, `feature/multi-stop`, `feature/accounts`) → pull request → teammate review → merge to `main`.
 
 See `docs/BACKLOG.md` for future work (e.g. ETA-based weather forecast, drag-to-reorder stops, rename/edit favorites).
+=======
+# Route-Planner
+RoutePlanner using Graphhopper
+>>>>>>> JerileeMonicRosales/main
